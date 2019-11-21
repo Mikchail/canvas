@@ -1,5 +1,15 @@
 #canvas{
-  display: block;
-  margin: 0 auto;
-  outline: 2px solid #eee;
+  /* display: block;
+  margin: 0 auto; */
+  outline: 5px solid gray;
+  margin-right: 20px
+}
+#canvas2{
+  /* display: block;
+  margin: 0 auto; */
+  outline: 5px solid black
+}
+.flex{
+  display: flex;
+  justify-content: center
 }

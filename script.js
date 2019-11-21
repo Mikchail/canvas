@@ -76,7 +76,7 @@ function draw() {
 
 setInterval(function(){
   draw()
-},1000/30);
+},2);
 
 /*
 var canvas = document.getElementById("canvas");

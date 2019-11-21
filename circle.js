@@ -11,7 +11,10 @@
       defaultRadius: 2,
       addedRadius: 2,
       particleAmount: 32,
-      addParticleAmount: 4,
+      addParticleAmount: 10,
+      comunicationRadius: 170,
+      lineWidth: 0.5,
+      lineColor: `rgba(255,255,255,opacity)`
     },
     particle = [],
     Particle = function(Xpos, Ypos) {
@@ -36,7 +39,7 @@
         if (this.x >= w || this.x <= 0) {
           this.d.x *= -1;
         }
-        if (this.y >= h || h <= 0) {
+        if (this.y >= h || this.y <= 0) {
           this.d.y *= -1;
         }
         this.x > w ? (this.x = w) : this.x;
@@ -53,6 +56,26 @@
     },
     checkDistance = function(x1, y1, x2, y2) {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    },
+    comunicatePoints = function(point1, father) {
+      for (var i = 0; i < father.length; i++) {
+        var distance = checkDistance(
+          point1.x,
+          point1.y,
+          father[i].x,
+          father[i].y
+        );
+        var opacity = 1 - distance / options.comunicationRadius;
+        if (opacity > 0) {
+          ctx.lineWidth = options.lineWidth;
+          ctx.strokeStyle = options.lineColor.replace("opacity", opacity);
+          ctx.beginPath();
+          ctx.moveTo(point1.x, point1.y);
+          ctx.lineTo(father[i].x, father[i].y);
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
     };
 
   function setup() {
@@ -69,6 +92,9 @@
       particle[i].update();
       particle[i].draw();
     }
+    for (var j = 0; j < particle.length; j++) {
+      comunicatePoints(particle[j], particle);
+    }
     window.requestAnimationFrame(loop);
   }
 
@@ -80,7 +106,10 @@
     }
   });
   canvas.addEventListener("contextmenu", function(e) {
-    e.preventDefault()
-    particle.pop(new Particle(e.pageX, e.pageY));
+    e.preventDefault();
+    particle.splice(
+      particle.length - options.addParticleAmount,
+      options.addParticleAmount
+    );
   });
 })();
